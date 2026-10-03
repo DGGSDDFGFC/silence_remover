@@ -21,7 +21,8 @@ body {
     font-family: 'Outfit', sans-serif;
     background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
     color: var(--text-main);
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -55,7 +56,6 @@ body {
     padding: 40px;
     border-radius: 24px;
     z-index: 1;
-    margin: auto;
 }
 
 .glass-panel {

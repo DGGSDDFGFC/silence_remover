@@ -44,6 +44,8 @@ def process_audio():
     threshold = request.form.get('threshold', -40, type=int)
     duration_s = request.form.get('duration', 0.3, type=float)
     duration_ms = int(duration_s * 1000)
+    padding = request.form.get('padding', 200, type=int)
+    out_format = request.form.get('format', 'original', type=str)
     
     filename = secure_filename(file.filename)
     unique_id = str(uuid.uuid4())
@@ -59,13 +61,13 @@ def process_audio():
         orig_len = len(audio) / 1000.0
         
         # Split on silence
-        # keep_silence=200 keeps 200ms of the detected silence segments that are > min_silence_len.
+        # keep_silence keeps padding (in ms) of the detected silence segments that are > min_silence_len.
         # Short silences (< duration_ms) are kept automatically because they don't trigger the split.
         audio_chunks = split_on_silence(
             audio,
             min_silence_len=duration_ms,
             silence_thresh=threshold,
-            keep_silence=200
+            keep_silence=padding
         )
         
         if not audio_chunks:
@@ -78,6 +80,11 @@ def process_audio():
             
         # Export processed audio
         ext = filename.rsplit('.', 1)[1].lower()
+        if out_format and out_format != 'original':
+            ext = out_format
+            output_filename = f"processed_{filename.rsplit('.', 1)[0]}.{ext}"
+            output_path = os.path.join(app.config['OUTPUT_FOLDER'], f"{unique_id}_{output_filename}")
+            
         format_name = ext if ext != 'm4a' else 'mp4'  # pydub uses mp4 for m4a
         processed_audio.export(output_path, format=format_name)
         

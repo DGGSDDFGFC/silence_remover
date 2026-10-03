@@ -23,6 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const thresholdVal = document.getElementById('thresholdVal');
     const durationVal = document.getElementById('durationVal');
 
+    // Advanced Settings
+    const paddingSlider = document.getElementById('paddingSlider');
+    const paddingVal = document.getElementById('paddingVal');
+    const formatSelect = document.getElementById('formatSelect');
+
     // Stats
     const statOriginal = document.getElementById('statOriginal');
     const statRemoved = document.getElementById('statRemoved');
@@ -40,6 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     durationSlider.addEventListener('input', (e) => {
         durationVal.textContent = `${e.target.value} s`;
+    });
+
+    paddingSlider.addEventListener('input', (e) => {
+        paddingVal.textContent = `${e.target.value} ms`;
     });
 
     // Drag & Drop
@@ -111,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('audio', currentFile);
         formData.append('threshold', thresholdSlider.value);
         formData.append('duration', durationSlider.value);
+        formData.append('padding', paddingSlider.value);
+        formData.append('format', formatSelect.value);
 
         try {
             const response = await fetch('/process', {
